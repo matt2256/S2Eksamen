@@ -1,0 +1,301 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="S2EksamenModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Ansatte">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Navn" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Telefon" Type="int" Nullable="false" />
+          <Property Name="Løn" Type="int" Nullable="false" />
+          <Property Name="Jobtype" Type="varchar" MaxLength="255" />
+          <Property Name="Dommer" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Spillere">
+          <Key>
+            <PropertyRef Name="SpillerId" />
+          </Key>
+          <Property Name="SpillerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Navn" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="SummonerNavn" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Rang" Type="int" Nullable="false" />
+          <Property Name="Telefonnummer" Type="int" Nullable="false" />
+          <Property Name="Tuneringstype" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Sponsorer">
+          <Key>
+            <PropertyRef Name="SponsorerId" />
+          </Key>
+          <Property Name="SponsorerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Firmanavn" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Branche" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Spillerid" Type="int" />
+          <Property Name="Spillernavn" Type="varchar" MaxLength="255" />
+          <Property Name="Udgift" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tuneringer">
+          <Key>
+            <PropertyRef Name="TurneringsId" />
+          </Key>
+          <Property Name="TurneringsId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Tuneringsnavn" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Spillerid" Type="int" />
+          <Property Name="Spillernavn" Type="varchar" MaxLength="255" />
+          <Property Name="Spillertelefon" Type="int" />
+          <Property Name="Dommerid" Type="int" />
+          <Property Name="Dommernavn" Type="varchar" MaxLength="255" />
+          <Property Name="Dommertelefon" Type="varchar" MaxLength="255" />
+          <Property Name="Dommerlevel" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <Association Name="FK_SponsorSpillere">
+          <End Role="Spillere" Type="Self.Spillere" Multiplicity="0..1" />
+          <End Role="Sponsorer" Type="Self.Sponsorer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Spillere">
+              <PropertyRef Name="SpillerId" />
+            </Principal>
+            <Dependent Role="Sponsorer">
+              <PropertyRef Name="Spillerid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TurneringsAnsatte">
+          <End Role="Ansatte" Type="Self.Ansatte" Multiplicity="0..1" />
+          <End Role="Tuneringer" Type="Self.Tuneringer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ansatte">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Tuneringer">
+              <PropertyRef Name="Dommerid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TurneringsSpillere">
+          <End Role="Spillere" Type="Self.Spillere" Multiplicity="0..1" />
+          <End Role="Tuneringer" Type="Self.Tuneringer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Spillere">
+              <PropertyRef Name="SpillerId" />
+            </Principal>
+            <Dependent Role="Tuneringer">
+              <PropertyRef Name="Spillerid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="S2EksamenModelStoreContainer">
+          <EntitySet Name="Ansatte" EntityType="Self.Ansatte" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Spillere" EntityType="Self.Spillere" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sponsorer" EntityType="Self.Sponsorer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tuneringer" EntityType="Self.Tuneringer" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_SponsorSpillere" Association="Self.FK_SponsorSpillere">
+            <End Role="Spillere" EntitySet="Spillere" />
+            <End Role="Sponsorer" EntitySet="Sponsorer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TurneringsAnsatte" Association="Self.FK_TurneringsAnsatte">
+            <End Role="Ansatte" EntitySet="Ansatte" />
+            <End Role="Tuneringer" EntitySet="Tuneringer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TurneringsSpillere" Association="Self.FK_TurneringsSpillere">
+            <End Role="Spillere" EntitySet="Spillere" />
+            <End Role="Tuneringer" EntitySet="Tuneringer" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="S2EksamenModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Ansatte">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Navn" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Telefon" Type="Int32" Nullable="false" />
+          <Property Name="Løn" Type="Int32" Nullable="false" />
+          <Property Name="Jobtype" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Dommer" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Tuneringer" Relationship="Self.FK_TurneringsAnsatte" FromRole="Ansatte" ToRole="Tuneringer" />
+        </EntityType>
+        <EntityType Name="Spillere">
+          <Key>
+            <PropertyRef Name="SpillerId" />
+          </Key>
+          <Property Name="SpillerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Navn" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="SummonerNavn" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Rang" Type="Int32" Nullable="false" />
+          <Property Name="Telefonnummer" Type="Int32" Nullable="false" />
+          <Property Name="Tuneringstype" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Sponsorer" Relationship="Self.FK_SponsorSpillere" FromRole="Spillere" ToRole="Sponsorer" />
+          <NavigationProperty Name="Tuneringer" Relationship="Self.FK_TurneringsSpillere" FromRole="Spillere" ToRole="Tuneringer" />
+        </EntityType>
+        <EntityType Name="Sponsorer">
+          <Key>
+            <PropertyRef Name="SponsorerId" />
+          </Key>
+          <Property Name="SponsorerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Firmanavn" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Branche" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Spillerid" Type="Int32" />
+          <Property Name="Spillernavn" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Udgift" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Spillere" Relationship="Self.FK_SponsorSpillere" FromRole="Sponsorer" ToRole="Spillere" />
+        </EntityType>
+        <EntityType Name="Tuneringer">
+          <Key>
+            <PropertyRef Name="TurneringsId" />
+          </Key>
+          <Property Name="TurneringsId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Tuneringsnavn" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Spillerid" Type="Int32" />
+          <Property Name="Spillernavn" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Spillertelefon" Type="Int32" />
+          <Property Name="Dommerid" Type="Int32" />
+          <Property Name="Dommernavn" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Dommertelefon" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Dommerlevel" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Ansatte" Relationship="Self.FK_TurneringsAnsatte" FromRole="Tuneringer" ToRole="Ansatte" />
+          <NavigationProperty Name="Spillere" Relationship="Self.FK_TurneringsSpillere" FromRole="Tuneringer" ToRole="Spillere" />
+        </EntityType>
+        <Association Name="FK_TurneringsAnsatte">
+          <End Role="Ansatte" Type="Self.Ansatte" Multiplicity="0..1" />
+          <End Role="Tuneringer" Type="Self.Tuneringer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ansatte">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Tuneringer">
+              <PropertyRef Name="Dommerid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SponsorSpillere">
+          <End Role="Spillere" Type="Self.Spillere" Multiplicity="0..1" />
+          <End Role="Sponsorer" Type="Self.Sponsorer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Spillere">
+              <PropertyRef Name="SpillerId" />
+            </Principal>
+            <Dependent Role="Sponsorer">
+              <PropertyRef Name="Spillerid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TurneringsSpillere">
+          <End Role="Spillere" Type="Self.Spillere" Multiplicity="0..1" />
+          <End Role="Tuneringer" Type="Self.Tuneringer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Spillere">
+              <PropertyRef Name="SpillerId" />
+            </Principal>
+            <Dependent Role="Tuneringer">
+              <PropertyRef Name="Spillerid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="S2EksamenEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Ansatte" EntityType="Self.Ansatte" />
+          <EntitySet Name="Spillere" EntityType="Self.Spillere" />
+          <EntitySet Name="Sponsorer" EntityType="Self.Sponsorer" />
+          <EntitySet Name="Tuneringer" EntityType="Self.Tuneringer" />
+          <AssociationSet Name="FK_TurneringsAnsatte" Association="Self.FK_TurneringsAnsatte">
+            <End Role="Ansatte" EntitySet="Ansatte" />
+            <End Role="Tuneringer" EntitySet="Tuneringer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SponsorSpillere" Association="Self.FK_SponsorSpillere">
+            <End Role="Spillere" EntitySet="Spillere" />
+            <End Role="Sponsorer" EntitySet="Sponsorer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TurneringsSpillere" Association="Self.FK_TurneringsSpillere">
+            <End Role="Spillere" EntitySet="Spillere" />
+            <End Role="Tuneringer" EntitySet="Tuneringer" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="S2EksamenModelStoreContainer" CdmEntityContainer="S2EksamenEntities">
+          <EntitySetMapping Name="Ansatte">
+            <EntityTypeMapping TypeName="S2EksamenModel.Ansatte">
+              <MappingFragment StoreEntitySet="Ansatte">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Navn" ColumnName="Navn" />
+                <ScalarProperty Name="Telefon" ColumnName="Telefon" />
+                <ScalarProperty Name="Løn" ColumnName="Løn" />
+                <ScalarProperty Name="Jobtype" ColumnName="Jobtype" />
+                <ScalarProperty Name="Dommer" ColumnName="Dommer" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Spillere">
+            <EntityTypeMapping TypeName="S2EksamenModel.Spillere">
+              <MappingFragment StoreEntitySet="Spillere">
+                <ScalarProperty Name="SpillerId" ColumnName="SpillerId" />
+                <ScalarProperty Name="Navn" ColumnName="Navn" />
+                <ScalarProperty Name="SummonerNavn" ColumnName="SummonerNavn" />
+                <ScalarProperty Name="Rang" ColumnName="Rang" />
+                <ScalarProperty Name="Telefonnummer" ColumnName="Telefonnummer" />
+                <ScalarProperty Name="Tuneringstype" ColumnName="Tuneringstype" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sponsorer">
+            <EntityTypeMapping TypeName="S2EksamenModel.Sponsorer">
+              <MappingFragment StoreEntitySet="Sponsorer">
+                <ScalarProperty Name="SponsorerId" ColumnName="SponsorerId" />
+                <ScalarProperty Name="Firmanavn" ColumnName="Firmanavn" />
+                <ScalarProperty Name="Branche" ColumnName="Branche" />
+                <ScalarProperty Name="Spillerid" ColumnName="Spillerid" />
+                <ScalarProperty Name="Spillernavn" ColumnName="Spillernavn" />
+                <ScalarProperty Name="Udgift" ColumnName="Udgift" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tuneringer">
+            <EntityTypeMapping TypeName="S2EksamenModel.Tuneringer">
+              <MappingFragment StoreEntitySet="Tuneringer">
+                <ScalarProperty Name="TurneringsId" ColumnName="TurneringsId" />
+                <ScalarProperty Name="Tuneringsnavn" ColumnName="Tuneringsnavn" />
+                <ScalarProperty Name="Spillerid" ColumnName="Spillerid" />
+                <ScalarProperty Name="Spillernavn" ColumnName="Spillernavn" />
+                <ScalarProperty Name="Spillertelefon" ColumnName="Spillertelefon" />
+                <ScalarProperty Name="Dommerid" ColumnName="Dommerid" />
+                <ScalarProperty Name="Dommernavn" ColumnName="Dommernavn" />
+                <ScalarProperty Name="Dommertelefon" ColumnName="Dommertelefon" />
+                <ScalarProperty Name="Dommerlevel" ColumnName="Dommerlevel" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
